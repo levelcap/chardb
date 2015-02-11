@@ -2,16 +2,26 @@
 <html ng-app="chardbApp">
 <head>
     <title>Hello AngularJS</title>
+    <link rel='stylesheet prefetch' href='http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css'>
+    <link rel='stylesheet prefetch' href='http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css'>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular-sanitize.min.js'></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular.min.js'></script>
+
     <script src="/js/main.js"></script>
 </head>
 
 <body>
-<div ng-controller="HelloController">
+<div ng-controller="CharacterController">
     <p>Name: {{char.name}}</p>
+
     <p>Description: <span ng-bind-html="char.description"></span></p>
+
+    <div class="container app" style="border: 0px solid white; background-color: transparent;">
+        <div text-angular="text-angular" name="htmlcontent" ng-model="htmlcontent" ta-disabled='disabled'></div>
+
+    </div>
 </div>
 
-</script>
 </body>
 </html>
