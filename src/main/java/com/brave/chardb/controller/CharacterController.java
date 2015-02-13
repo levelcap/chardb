@@ -27,7 +27,7 @@ public class CharacterController extends BaseController {
         return new ResponseEntity<Character>(character, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(value = "/{id}", method = RequestMethod.POST)
     @ResponseBody
     public HttpEntity<Character> saveCharacter(@RequestBody Character character) {
         if (isLoggedIn()) {
