@@ -1,9 +1,8 @@
 package com.brave.chardb.model;
 
+import com.brave.chardb.enums.Genre;
+import com.brave.chardb.enums.TimePeriod;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-
-import java.util.List;
 
 public class Character {
     @Id
@@ -13,6 +12,8 @@ public class Character {
     private String url;
     private String thumb;
     private String description;
+    private TimePeriod timePeriod;
+    private Genre genre;
 
     public String getId() {
         return id;
@@ -62,4 +63,19 @@ public class Character {
         this.description = description;
     }
 
+    public TimePeriod getTimePeriod() {
+        return timePeriod;
+    }
+
+    public void setTimePeriod(TimePeriod timePeriod) {
+        this.timePeriod = timePeriod;
+    }
+
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
 }
