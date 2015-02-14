@@ -1,24 +1,24 @@
 package com.brave.chardb.configuration;
 
-import com.mongodb.Mongo;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
+import com.mongodb.Mongo;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+
 @Configuration
 @EnableMongoRepositories
-@PropertySource("classpath:application.properties")
 public class MongoConfiguration extends AbstractMongoConfiguration
 {
-    @Value("${mongodb.uri}")
-    String uriString;
-
-    @Value("${mongodb.databasename}")
-    String mongodb_databasename;
+    private static String uriString;
+    private static String mongodb_databasename;
+    
+    static {
+    	uriString = System.getenv("MONGODB_URI");
+    	mongodb_databasename = System.getenv("MONGODB_DB");
+    }
 
     @Override
     protected String getDatabaseName()
