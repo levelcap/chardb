@@ -36,6 +36,21 @@ public class PageController extends BaseController {
         model.addAttribute("title", "CharDB - " + character.getName());
         return "char";
     }
+    
+    @RequestMapping("/new")
+    public String newCharacter(Model model) {
+    	model.addAttribute("loggedIn", isLoggedIn());
+    	if (isLoggedIn()) {
+    		Character character = new Character();
+    		character.setUserId(getCurrentUser().getId());
+    		character = characterRepository.save(character);
+            model.addAttribute("character", character);
+            model.addAttribute("title", "CharDB - New Character");
+    		return "edit";
+    	} else {
+    		return "login";
+    	}
+    }
 
     @RequestMapping("/{id}/edit")
     public String edit(@PathVariable("id") String id, Model model) {
