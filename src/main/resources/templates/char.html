@@ -5,6 +5,8 @@
     <link rel='stylesheet prefetch' href='https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css'/>
     <link rel='stylesheet prefetch' href='https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css'/>
     <link rel='stylesheet prefetch' href='/css/main.css'/>
+    <link href='http://fonts.googleapis.com/css?family=Covered+By+Your+Grace' rel='stylesheet' type='text/css'/>
+    <link href='http://fonts.googleapis.com/css?family=Metamorphous' rel='stylesheet' type='text/css'/>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular-sanitize.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular.min.js'></script>
@@ -14,18 +16,29 @@
 </head>
 
 <body>
-<section id="characterSection" ng-controller="CharacterController">
-    <div class="subsection" id="basicInfo">
-        <div id="name"><span th:text="${character.name}"></span></div>
-        <img th:attr="src=${character.url}"/>
-    </div>
+	<div class="page">
+		<header>
+			<ul>
+				<a href="/"><li>Home</li></a>
+				<a href="/login" th:unless="${loggedIn}"><li>Login</li></a>
+				<a href="/user" th:if="${loggedIn}"><li>Your Characters</li></a>
+				<a href="/new" th:if="${loggedIn}"><li>New Character</li></a>
+				<a href="/logout" th:if="${loggedIn}"><li>Logout</li></a>
+			</ul>
+		</header>
+		<section id="characterSection" ng-controller="CharacterController">
+    		<div class="subsection" id="basicInfo">
+        		<div id="name"><span th:text="${character.name}"></span></div>
+        		<img th:attr="src=${character.url}"/>
+    		</div>
 
-    <div class="subsection" id="details">
-        <div id="description" th:utext="${character.description}">
-
-        </div>
-    </div>
-</section>
-
+    		<div class="subsection" id="details">
+    			<div class="container app">
+        			<div id="description" th:utext="${character.description}">
+        			</div>
+        		</div>
+    		</div>
+		</section>
+	</div>
 </body>
 </html>

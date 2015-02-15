@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.brave.chardb.model.Character;
 import com.brave.chardb.model.User;
 import com.brave.chardb.repository.CharacterRepository;
+import com.brave.chardb.repository.UserRepository;
 
 /**
  * Created by dcohen on 2/13/15.
@@ -18,14 +19,19 @@ public class PageController extends BaseController {
     @Autowired
     private CharacterRepository characterRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+    
     @RequestMapping("/")
     public String index(Model model) {
+    	model.addAttribute("loggedIn", isLoggedIn());
         return "index";
     }
 
     @RequestMapping("/{id}")
     public String index(@PathVariable("id") String id, Model model) {
         Character character = characterRepository.findOne(id);
+        model.addAttribute("loggedIn", isLoggedIn());
         model.addAttribute("character", character);
         model.addAttribute("title", "CharDB - " + character.getName());
         return "char";
@@ -33,6 +39,7 @@ public class PageController extends BaseController {
 
     @RequestMapping("/{id}/edit")
     public String edit(@PathVariable("id") String id, Model model) {
+    	model.addAttribute("loggedIn", isLoggedIn());
         if (isLoggedIn()) {
             User currentUser = getCurrentUser();
             Character existingCharacter = characterRepository.findOne(id);
@@ -50,8 +57,37 @@ public class PageController extends BaseController {
     }
 
     @RequestMapping("/login")
-    public String login() {
+    public String login(Model model) {
+    	model.addAttribute("loggedIn", isLoggedIn());
+    	model.addAttribute("title", "CharDB - Login");
         return "login";
     }
-
+    
+	@RequestMapping("/user")
+	public String getLoggedInUser(Model model) {
+		model.addAttribute("loggedIn", isLoggedIn());
+		if (isLoggedIn()) {
+			model.addAttribute("user", getCurrentUser());
+			model.addAttribute("title", "CharDB - User");
+			addCharactersToModel(model, getCurrentUser());
+			return "user";
+		} else {
+			return "login";
+		}
+	}
+	
+	@RequestMapping("/user/{id}")
+	public String getUser(@PathVariable("id") String id, Model model) {
+		model.addAttribute("loggedIn", isLoggedIn());
+		User user = userRepository.findOne(id);
+		model.addAttribute("user", user);
+		model.addAttribute("title", "CharDB - User");
+		addCharactersToModel(model, user);
+		return "user";
+	}
+    
+	private void addCharactersToModel(Model model, User user) {
+		model.addAttribute("loggedIn", isLoggedIn());
+		model.addAttribute("characters", characterRepository.findByUserId(user.getId()));
+	}
 }

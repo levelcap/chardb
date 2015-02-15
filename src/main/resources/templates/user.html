@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<html ng-app="chardbApp">
 <head>
-    <title>CharDB - Login</title>
+    <title th:text="${title}"></title>
     <link rel='stylesheet prefetch' href='https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css'/>
     <link rel='stylesheet prefetch' href='https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css'/>
     <link rel='stylesheet prefetch' href='/css/main.css'/>
@@ -16,6 +14,7 @@
 
     <script src="/js/main.js"></script>
 </head>
+
 <body>
 	<div class="page">
 		<header>
@@ -27,28 +26,14 @@
 				<a href="/logout" th:if="${loggedIn}"><li>Logout</li></a>
 			</ul>
 		</header>
-		<section id="loginForm">
-    		<div class="loginWarn" th:if="${param.error}">Invalid username and password.</div>
-    		<div class="loginWarn" th:if="${param.logout}">You have been logged out.</div>
-    		<div class="loginWarn" id="confirmationError"></div>
-    		<div id="loginDiv">
-    		<form th:action="@{/login}" method="post">
-        		<div>
-            		<input type="text" name="username" placeholder="Email" class="longInput handwrite"/>
-        		</div>
-        		<div>
-            		<input type="password" name="password" placeholder="Password" class="longInput handwrite"/>
-        		</div>
-        		<div>	
-            		<input type="submit" value="Login" id="loginButton" class="handwrite" />
-        		</div>
-    		</form>
-    		</div>
-    		<section id="loginLinks">
-        		<span><a href="/forgotPassword">Forgot password?</a></span>
-        		<span><a href="/register">Need to register?</a></span>
-        		<br/>
-    		</section>
+		<section id="userSection" ng-controller="UserController">
+			<h1>Your Characters</h1>
+			<ul id="characterList">
+				<li th:each="char : ${characters}">
+    				<a href="/" th:href="@{'/'+${char.id}}"><span th:text="${char.name}"></span></a>
+    				<a href="/" th:href="@{'/'+${char.id}+'/edit'}">(edit)</a>
+				</li>
+			</ul>
 		</section>
 	</div>
 </body>
