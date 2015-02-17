@@ -26,6 +26,8 @@ public class PageController extends BaseController {
     
     @RequestMapping("/")
     public String index(Model model) {
+    	Character character = characterRepository.findOne("ac33c7b3-5176-4642-857b-349d9f9aaadd");
+    	model.addAttribute("character", character);
     	model.addAttribute("loggedIn", isLoggedIn());
         return "index";
     }

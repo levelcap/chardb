@@ -54,6 +54,37 @@ h1 {
 	font-size: 25px;
 }
 
+h2 {
+	display: block;
+	width: 100%;
+	font-family: 'Metamorphous', cursive;
+	padding-left: 35px;
+	padding-bottom: 0px;
+	font-size: 25px;
+}
+
+#featuredCharacter {
+	border: 1px solid rgb(195, 195, 199);
+	width: 95%;
+	margin: auto;
+	height: 300px;
+	margin-top: 20px;
+	overflow-y: scroll;
+}
+
+.homeDiv {
+	border: 1px solid rgb(195, 195, 199);
+	width: 95%;
+	margin: auto;
+	margin-top: 20px;
+}
+
+.browseSub {
+	display: inline-block;
+	width: 45%;
+	padding: 2%;
+}
+
 header ul li {
 	display: inline-block;
 	border: 2px solid #0000A0;
@@ -95,7 +126,7 @@ header ul li:hover {
 	width: 25%;
 }
 
-#basicInfo input, #basicInfo select {
+#basicInfo input,#basicInfo select {
 	border: 1px solid rgb(195, 195, 199);
 	background-color: transparent;
 	font-family: 'Covered By Your Grace';
