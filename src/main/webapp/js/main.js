@@ -3,17 +3,17 @@ var chardbApp = angular.module('chardbApp', ['textAngular', 'ngImgur']);
 chardbApp.controller('CharacterController', function ($scope, $http, $sce) {
 	var id= $("#charId").val();
 	$scope.timePeriods = [
-		"MEDIEVAL",
-		"VICTORIAN",
-		"MODERN",
-		"FUTURE"
+		{id: "MEDIEVAL", name: "Medieval"},
+		{id: "VICTORIAN", name: "Victorian"},
+		{id: "MODERN", name: "Modern"},
+		{id: "FUTURE", name: "Future"}
 	];
 	
 	$scope.genres = [
-		"FANTASY",
-		"REALISTIC",
-		"SCIFI",
-		"ANIME"
+	    {id: "FANTASY", name: "Fantasy"},
+	    {id: "REALISTIC", name: "Realistic"},
+	    {id: "SCIFI", name: "Science Fiction"},
+	    {id: "ANIME", name: "Anime"}
 	];
 
     $http.get('/character/' + id).

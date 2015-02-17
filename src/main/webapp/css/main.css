@@ -95,11 +95,13 @@ header ul li:hover {
 	width: 25%;
 }
 
-#basicInfo input {
-	border: none;
+#basicInfo input, #basicInfo select {
+	border: 1px solid rgb(195, 195, 199);
+	background-color: transparent;
 	font-family: 'Covered By Your Grace';
 	font-size: 20px;
 	color: #0000A0;
+	width: 200px;
 }
 
 #basicInfo img {
@@ -154,7 +156,8 @@ header ul li:hover {
 }
 
 .charDbButton {
-	display: inline-block; padding : 10px;
+	display: inline-block;
+	padding: 10px;
 	border: 1px solid #A52A2A;
 	background-color: white;
 	width: 100px;

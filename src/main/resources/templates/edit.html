@@ -33,9 +33,9 @@
     		<div class="subsection" id="basicInfo">
         		<input ng-model="char.name" type="text" name="name" placeholder="Character Name" required="true"/>
         		<img src="{{char.url}}" class="drop"/>
-        		<input ng-model="char.group" type="text" name="group" placeholder="Group" required="true"/>
-        		<select ng-model="char.timePeriod" ng-options="timePeriod for timePeriod in timePeriods"></select><br/>
-        		<select ng-model="char.genre" ng-options="genre for genre in genres"></select><br/>
+        		<div class="infoline"><label>Group:</label><span><input ng-model="char.group" type="text" name="group" placeholder="Group" required="true"/></span></div>
+        		<div class="infoline"><label>Time:</label><span><select ng-model="char.timePeriod" ng-options="timePeriod.id as timePeriod.name for timePeriod in timePeriods"></select></span></div>
+        		<div class="infoline"><label>Genre:</label><span><select ng-model="char.genre" ng-options="genre.id as genre.name for genre in genres"></select></span></div>
     		</div>
 
     		<div class="subsection" id="details">
