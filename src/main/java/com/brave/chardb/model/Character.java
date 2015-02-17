@@ -11,6 +11,7 @@ public class Character {
     private String name;
     private String url;
     private String description;
+    private String group;
     private TimePeriod timePeriod;
     private Genre genre;
 
@@ -54,6 +55,14 @@ public class Character {
         this.description = description;
     }
 
+    public String getGroup() {
+    	return group;
+    }
+    
+    public void setGroup(String group) {
+    	this.group = group;
+    }
+    
     public TimePeriod getTimePeriod() {
         return timePeriod;
     }

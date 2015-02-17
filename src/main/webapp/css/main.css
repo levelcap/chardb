@@ -142,6 +142,17 @@ header ul li:hover {
 	outline-color: transparent;
 }
 
+.infoline {
+	display: table-row;
+	font-size: 12px;
+}
+
+.infoline span {
+	display: table-cell;
+	padding-left: 10px;
+	padding-top: 10px;
+}
+
 .charDbButton {
 	display: inline-block; padding : 10px;
 	border: 1px solid #A52A2A;
