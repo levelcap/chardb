@@ -1,7 +1,8 @@
 var chardbApp = angular.module('chardbApp', ['textAngular', 'ngImgur']);
 
 chardbApp.controller('CharacterController', function ($scope, $http, $sce) {
-    $http.get('/character/54dbc0e4646174009a000000').
+	var id= $("#charId").val();
+    $http.get('/character/' + id).
         success(function (data) {
             $scope.char = data;
             $scope.char.description = $sce.trustAsHtml($scope.char.description);
@@ -13,14 +14,29 @@ chardbApp.controller('CharacterController', function ($scope, $http, $sce) {
     $scope.save = function () {
         var saveCharacter = $scope.char;
         saveCharacter.description = $scope.htmlcontent.toString();
-        $http.post('/character/54dbc0e4646174009a000000', saveCharacter).
+        saveCharacter.id = $("#charId").val();
+        $http.post('/character/' + id, saveCharacter).
             success(function (data, status, headers, config) {
-                // this callback will be called asynchronously
-                // when the response is available
+            	alert("Save success");
             }).
             error(function (data, status, headers, config) {
-                // called asynchronously if an error occurs
-                // or server returns response with an error status.
+            	alert("Save failure");
+            });
+    }
+});
+
+chardbApp.controller('RegistrationController', function ($scope, $http, $sce) {
+    $scope.submit = function () {
+        var saveUser = {};
+        saveUser.email = $scope.email;
+        saveUser.password = $scope.password;
+        
+        $http.post('/api/user', saveUser).
+            success(function (data, status, headers, config) {
+            	window.location.href = "/login";
+            }).
+            error(function (data, status, headers, config) {
+            	alert("A user with that email already exists");
             });
     }
 });

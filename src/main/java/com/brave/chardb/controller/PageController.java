@@ -1,5 +1,7 @@
 package com.brave.chardb.controller;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,9 +44,9 @@ public class PageController extends BaseController {
     	model.addAttribute("loggedIn", isLoggedIn());
     	if (isLoggedIn()) {
     		Character character = new Character();
+    		character.setId(UUID.randomUUID().toString());
     		character.setUserId(getCurrentUser().getId());
-    		character = characterRepository.save(character);
-            model.addAttribute("character", character);
+    		model.addAttribute("character", character);
             model.addAttribute("title", "CharDB - New Character");
     		return "edit";
     	} else {
@@ -65,6 +67,7 @@ public class PageController extends BaseController {
                 model.addAttribute("title", "CharDB - " + existingCharacter.getName());
                 return "char";
             }
+            model.addAttribute("character", existingCharacter);
             model.addAttribute("title", "CharDB - Editing " + existingCharacter.getName());
             return "edit";
         }
@@ -99,6 +102,12 @@ public class PageController extends BaseController {
 		model.addAttribute("title", "CharDB - User");
 		addCharactersToModel(model, user);
 		return "user";
+	}
+	
+	@RequestMapping("/register")
+	public String registrationPage(Model model) {
+		model.addAttribute("loggedIn", isLoggedIn());
+		return "register";
 	}
     
 	private void addCharactersToModel(Model model, User user) {

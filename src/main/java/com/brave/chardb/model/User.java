@@ -1,6 +1,5 @@
 package com.brave.chardb.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
 
 public class User {
@@ -8,7 +7,6 @@ public class User {
 	private String id;
     private String username;
 	private String email;
-	@JsonIgnore
 	private String password;
 
 	public User() {

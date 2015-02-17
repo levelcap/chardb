@@ -95,6 +95,18 @@ header ul li:hover {
 	width: 25%;
 }
 
+#basicInfo input {
+	border: none;
+	font-family: 'Covered By Your Grace';
+	font-size: 20px;
+	color: #0000A0;
+}
+
+#basicInfo img {
+	max-width: 100%;
+	padding-top: 10px;
+}
+
 #details {
 	display: table-cell;
 	width: 75%;
@@ -144,7 +156,7 @@ header ul li:hover {
 }
 
 #loginDiv {
-	width: 400px;
+	width: 600px;
 	margin: auto;
 	margin-top: 30px;
 	padding: 30px;
@@ -168,7 +180,7 @@ header ul li:hover {
 }
 
 .longInput {
-	width: 250px;
+	width: 350px;
 }
 
 #loginDiv input:focus {

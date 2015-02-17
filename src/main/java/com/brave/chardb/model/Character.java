@@ -10,7 +10,6 @@ public class Character {
     private String userId;
     private String name;
     private String url;
-    private String thumb;
     private String description;
     private TimePeriod timePeriod;
     private Genre genre;
@@ -45,14 +44,6 @@ public class Character {
 
     public void setUrl(String url) {
         this.url = url;
-    }
-
-    public String getThumb() {
-        return thumb;
-    }
-
-    public void setThumb(String thumb) {
-        this.thumb = thumb;
     }
 
     public String getDescription() {

@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html ng-app="chardbApp">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3" ng-app="chardbApp">
 <head>
-    <title th:text="${title}"></title>
+    <title>CharDB - Login</title>
     <link rel='stylesheet prefetch' href='https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css'/>
     <link rel='stylesheet prefetch' href='https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css'/>
     <link rel='stylesheet prefetch' href='/css/main.css'/>
@@ -14,7 +16,6 @@
 
     <script src="/js/main.js"></script>
 </head>
-
 <body>
 	<div class="page">
 		<header>
@@ -27,14 +28,20 @@
 				<a href="/logout" th:if="${loggedIn}"><li>Logout</li></a>
 			</ul>
 		</header>
-		<section id="userSection" ng-controller="UserController">
-			<h1>Your Characters</h1>
-			<ul id="characterList">
-				<li th:each="char : ${characters}">
-    				<a href="/" th:href="@{'/'+${char.id}}"><span th:text="${char.name}"></span></a>
-    				<a href="/" th:href="@{'/'+${char.id}+'/edit'}">(edit)</a>
-				</li>
-			</ul>
+		<section id="loginForm">
+		<div id="loginDiv">
+    		<form ng-submit="submit()" ng-controller="RegistrationController">
+        		<div>
+            		<input type="text" name="email" placeholder="Email" ng-model="email" class="longInput handwrite"/>
+        		</div>
+        		<div>
+            		<input type="password" name="password" placeholder="Password" ng-model="password" class="longInput handwrite"/>
+        		</div>
+        		<div>	
+            		<input type="submit" value="Register" id="loginButton" class="handwrite" />
+        		</div>
+    		</form>
+    	</div>
 		</section>
 	</div>
 </body>
