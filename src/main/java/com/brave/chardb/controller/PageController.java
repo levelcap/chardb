@@ -30,15 +30,6 @@ public class PageController extends BaseController {
         return "index";
     }
 
-    @RequestMapping("/{id}")
-    public String index(@PathVariable("id") String id, Model model) {
-        Character character = characterRepository.findOne(id);
-        model.addAttribute("loggedIn", isLoggedIn());
-        model.addAttribute("character", character);
-        model.addAttribute("title", "CharDB - " + character.getName());
-        return "char";
-    }
-    
     @RequestMapping("/new")
     public String newCharacter(Model model) {
     	model.addAttribute("loggedIn", isLoggedIn());
@@ -46,6 +37,7 @@ public class PageController extends BaseController {
     		Character character = new Character();
     		character.setId(UUID.randomUUID().toString());
     		character.setUserId(getCurrentUser().getId());
+    		character.setUrl("/images/blank.png");
     		model.addAttribute("character", character);
             model.addAttribute("title", "CharDB - New Character");
     		return "edit";
@@ -109,6 +101,15 @@ public class PageController extends BaseController {
 		model.addAttribute("loggedIn", isLoggedIn());
 		return "register";
 	}
+	
+    @RequestMapping("/{id}")
+    public String index(@PathVariable("id") String id, Model model) {
+        Character character = characterRepository.findOne(id);
+        model.addAttribute("loggedIn", isLoggedIn());
+        model.addAttribute("character", character);
+        model.addAttribute("title", "CharDB - " + character.getName());
+        return "char";
+    }
     
 	private void addCharactersToModel(Model model, User user) {
 		model.addAttribute("loggedIn", isLoggedIn());

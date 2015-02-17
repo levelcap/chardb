@@ -17,7 +17,7 @@
 </head>
 
 <body>
-	<div class="page">
+	<div class="page" ng-controller="CharacterController">
 		<header>
 			<ul>
 				<a href="/"><li>Home</li></a>
@@ -28,28 +28,22 @@
 				<a href="/logout" th:if="${loggedIn}"><li>Logout</li></a>
 			</ul>
 		</header>
-		<section id="characterSection" ng-controller="CharacterController">
+		<section id="characterSection">
 			<input type="hidden" name="charId" id="charId" th:value="${character.id}" />
     		<div class="subsection" id="basicInfo">
         		<input ng-model="char.name" type="text" name="name" placeholder="Character Name" required="true"/>
-        		<img src="{{char.url}}"/>
+        		<img src="{{char.url}}" class="drop"/>
     		</div>
 
     		<div class="subsection" id="details">
         		<div class="container app" style="background-color: transparent;">
             		<div text-angular="text-angular" name="htmlcontent" ng-model="htmlcontent" ta-disabled='disabled'></div>
         		</div>
-        		<div class="charDbButton" ng-click='save()' >Save</div>
+        		<div id="characterControls">
+        			<div class="charDbButton" ng-click='save()' >Save</div>
+        			<div class="charDbButton" ng-click='delete()' >Delete</div>
+        		</div>
     		</div>
-		</section>
-
-		<section class="drop">
-    		<h2>{{message}}</h2>
-    		<input type="text"
-           		ng-model="link"
-           		readonly="readonly"
-           		onclick="this.select();"
-           		placeholder="Imgur Link: Please upload an image first..." />
 		</section>
 	</div>
 </body>

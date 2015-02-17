@@ -4,7 +4,14 @@ chardbApp.controller('CharacterController', function ($scope, $http, $sce) {
 	var id= $("#charId").val();
     $http.get('/character/' + id).
         success(function (data) {
-            $scope.char = data;
+        	if (data == null || data == "") {
+        		$scope.char = {};
+        	} else {
+            	$scope.char = data;
+        	}	
+            if (null == $scope.char.url) {
+            	$scope.char.url = "/images/blank.png";
+            }
             $scope.char.description = $sce.trustAsHtml($scope.char.description);
             $scope.orightml = $scope.char.description;
             $scope.htmlcontent = $scope.orightml;
@@ -22,6 +29,17 @@ chardbApp.controller('CharacterController', function ($scope, $http, $sce) {
             error(function (data, status, headers, config) {
             	alert("Save failure");
             });
+    }
+    
+    $scope.delete = function () {
+    	$http.delete('/character/' + id).
+        success(function (data, status, headers, config) {
+        	alert("Delete success");
+        	window.location.href = "/user";
+        }).
+        error(function (data, status, headers, config) {
+        	alert("Delete failure");
+        });
     }
 });
 
@@ -62,11 +80,9 @@ chardbApp.controller('UserController', function ($scope, $http, $sce) {
 chardbApp.directive('drop', function ($timeout, imgur) {
     return {
         restrict: 'EAC',
-        scope: false,
+        scope: true,
         link: function link($scope, element) {
             imgur.setAPIKey('Client-ID 7ad9e6431502c89');
-            $scope.link = '';
-            $scope.message = 'Drop Image...';
             $scope.preventDefaultBehaviour = function preventDefaultBehaviour(event) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -74,18 +90,9 @@ chardbApp.directive('drop', function ($timeout, imgur) {
             element.on('drop', function onDrag(event) {
                 $scope.preventDefaultBehaviour(event);
                 var image = event.dataTransfer.files[0];
-                $scope.message = 'Uploading Image...';
 
                 imgur.upload(image).then(function then(model) {
-
-                    $scope.link = model.link;
                     $scope.char.url = model.link;
-                    $scope.message = 'Uploaded Image!';
-
-                    $timeout(function timeout() {
-                        $scope.message = 'Drop Image...';
-                    }, 2500);
-
                 });
 
             });
