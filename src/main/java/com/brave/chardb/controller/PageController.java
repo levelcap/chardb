@@ -103,6 +103,21 @@ public class PageController extends BaseController {
 		model.addAttribute("loggedIn", isLoggedIn());
 		return "register";
 	}
+
+    @RequestMapping("/c/{id}")
+    public String characterShortcut(@PathVariable("id") String id) {
+        return "/user";
+    }
+
+    @RequestMapping("/s/{id}")
+    public String settingShortcut(@PathVariable("id") String id) {
+        return "/user";
+    }
+
+    @RequestMapping("/u/{id}")
+    public String userShortcut(@PathVariable("id") String id) {
+        return "/user";
+    }
 	
     @RequestMapping("/{id}")
     public String index(@PathVariable("id") String id, Model model) {
