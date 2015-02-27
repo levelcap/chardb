@@ -48,7 +48,16 @@ public class PageController extends BaseController {
     	}
     }
 
-    @RequestMapping("/{id}/edit")
+    @RequestMapping("/char/{id}")
+    public String index(@PathVariable("id") String id, Model model) {
+        Character character = characterRepository.findOne(id);
+        model.addAttribute("loggedIn", isLoggedIn());
+        model.addAttribute("character", character);
+        model.addAttribute("title", "CharDB - " + character.getName());
+        return "char";
+    }
+
+    @RequestMapping("/char/{id}/edit")
     public String edit(@PathVariable("id") String id, Model model) {
     	model.addAttribute("loggedIn", isLoggedIn());
         if (isLoggedIn()) {
@@ -118,16 +127,7 @@ public class PageController extends BaseController {
     public String userShortcut(@PathVariable("id") String id) {
         return "/user";
     }
-	
-    @RequestMapping("/{id}")
-    public String index(@PathVariable("id") String id, Model model) {
-        Character character = characterRepository.findOne(id);
-        model.addAttribute("loggedIn", isLoggedIn());
-        model.addAttribute("character", character);
-        model.addAttribute("title", "CharDB - " + character.getName());
-        return "char";
-    }
-    
+
 	private void addCharactersToModel(Model model, User user) {
 		model.addAttribute("loggedIn", isLoggedIn());
 		model.addAttribute("characters", characterRepository.findByUserId(user.getId()));
