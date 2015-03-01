@@ -5,7 +5,7 @@ package com.brave.chardb.enums;
  */
 public enum Genre {
     FANTASY("Fantasy"),
-    REALISTC("Realistic"),
+    REALISTIC("Realistic"),
     SCIFI("Science Fiction"),
     ANIME("Anime");
 
