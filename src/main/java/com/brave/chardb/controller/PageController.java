@@ -1,17 +1,20 @@
 package com.brave.chardb.controller;
 
-import java.util.UUID;
-
+import com.brave.chardb.model.Character;
+import com.brave.chardb.model.User;
+import com.brave.chardb.repository.CharacterRepository;
+import com.brave.chardb.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.brave.chardb.model.Character;
-import com.brave.chardb.model.User;
-import com.brave.chardb.repository.CharacterRepository;
-import com.brave.chardb.repository.UserRepository;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 
 /**
  * Created by dcohen on 2/13/15.
@@ -26,7 +29,7 @@ public class PageController extends BaseController {
     
     @RequestMapping("/")
     public String index(Model model) {
-    	Character character = characterRepository.findOne("23cfee22-0db8-4dcf-9975-9dd28b3e095e");
+    	Character character = characterRepository.findOne("974ddf4e-121c-4fa6-bb41-d926ab999e9e");
     	model.addAttribute("character", character);
     	model.addAttribute("loggedIn", isLoggedIn());
         return "index";
@@ -41,7 +44,7 @@ public class PageController extends BaseController {
     		character.setUserId(getCurrentUser().getId());
     		character.setUrl("/images/blank.png");
     		model.addAttribute("character", character);
-            model.addAttribute("title", "CharDB - New Character");
+            model.addAttribute("title", "Character Center - New Character");
     		return "edit";
     	} else {
     		return "login";
@@ -53,7 +56,7 @@ public class PageController extends BaseController {
         Character character = characterRepository.findOne(id);
         model.addAttribute("loggedIn", isLoggedIn());
         model.addAttribute("character", character);
-        model.addAttribute("title", "CharDB - " + character.getName());
+        model.addAttribute("title", "Character Center - " + character.getName());
         return "char";
     }
 
@@ -67,11 +70,11 @@ public class PageController extends BaseController {
                 return "index";
             } else if (!existingCharacter.getUserId().equals(currentUser.getId())) {
             	model.addAttribute("character", existingCharacter);
-                model.addAttribute("title", "CharDB - " + existingCharacter.getName());
+                model.addAttribute("title", "Character Center - " + existingCharacter.getName());
                 return "char";
             }
             model.addAttribute("character", existingCharacter);
-            model.addAttribute("title", "CharDB - Editing " + existingCharacter.getName());
+            model.addAttribute("title", "Character Center - Editing " + existingCharacter.getName());
             return "edit";
         }
         return "login";
@@ -80,7 +83,7 @@ public class PageController extends BaseController {
     @RequestMapping("/login")
     public String login(Model model) {
     	model.addAttribute("loggedIn", isLoggedIn());
-    	model.addAttribute("title", "CharDB - Login");
+    	model.addAttribute("title", "Character Center - Login");
         return "login";
     }
     
@@ -89,7 +92,7 @@ public class PageController extends BaseController {
 		model.addAttribute("loggedIn", isLoggedIn());
 		if (isLoggedIn()) {
 			model.addAttribute("user", getCurrentUser());
-			model.addAttribute("title", "CharDB - User");
+			model.addAttribute("title", "Character Center - User");
 			addCharactersToModel(model, getCurrentUser());
 			return "user";
 		} else {
@@ -102,7 +105,7 @@ public class PageController extends BaseController {
 		model.addAttribute("loggedIn", isLoggedIn());
 		User user = userRepository.findOne(id);
 		model.addAttribute("user", user);
-		model.addAttribute("title", "CharDB - User");
+		model.addAttribute("title", "Character Center - User");
 		addCharactersToModel(model, user);
 		return "user";
 	}
@@ -126,6 +129,30 @@ public class PageController extends BaseController {
     @RequestMapping("/u/{id}")
     public String userShortcut(@PathVariable("id") String id) {
         return "/user";
+    }
+
+    @RequestMapping("/admin/characters")
+    public String adminCharacterPage(Model model) {
+        User currentUser = getCurrentUser();
+        if (getCurrentUser() != null && getCurrentUser().getEmail().equals("levelcap@live.com")) {
+            List<User> users = userRepository.findAll();
+            Map<User, List<Character>> charactersByUser = new HashMap<User, List<Character>>();
+
+            for (User user : users) {
+                List<Character> characters = characterRepository.findByUserId(user.getId());
+                if (characters != null && characters.size() > 0) {
+                    charactersByUser.put(user, characters);
+                }
+            }
+
+            model.addAttribute("charactersByUser", charactersByUser);
+            return "admin/characters";
+        } else {
+            Character character = characterRepository.findOne("974ddf4e-121c-4fa6-bb41-d926ab999e9e");
+            model.addAttribute("character", character);
+            model.addAttribute("loggedIn", isLoggedIn());
+            return "index";
+        }
     }
 
 	private void addCharactersToModel(Model model, User user) {

@@ -274,3 +274,15 @@ header ul li:hover {
     margin-right: 30px;
     margin-left: 30px;
 }
+
+
+/** Admin Page **/
+.userHeader {
+    font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+.userCharacter {
+    margin-left: 5px;
+}
