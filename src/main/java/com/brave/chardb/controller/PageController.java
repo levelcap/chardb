@@ -1,9 +1,12 @@
 package com.brave.chardb.controller;
 
+import com.brave.chardb.enums.Genre;
+import com.brave.chardb.enums.TimePeriod;
 import com.brave.chardb.model.Character;
 import com.brave.chardb.model.User;
 import com.brave.chardb.repository.CharacterRepository;
 import com.brave.chardb.repository.UserRepository;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,29 +29,29 @@ public class PageController extends BaseController {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @RequestMapping("/")
     public String index(Model model) {
-    	Character character = characterRepository.findOne("974ddf4e-121c-4fa6-bb41-d926ab999e9e");
-    	model.addAttribute("character", character);
-    	model.addAttribute("loggedIn", isLoggedIn());
+        Character character = characterRepository.findOne("974ddf4e-121c-4fa6-bb41-d926ab999e9e");
+        model.addAttribute("character", character);
+        model.addAttribute("loggedIn", isLoggedIn());
         return "index";
     }
 
     @RequestMapping("/new")
     public String newCharacter(Model model) {
-    	model.addAttribute("loggedIn", isLoggedIn());
-    	if (isLoggedIn()) {
-    		Character character = new Character();
-    		character.setId(UUID.randomUUID().toString());
-    		character.setUserId(getCurrentUser().getId());
-    		character.setUrl("/images/blank.png");
-    		model.addAttribute("character", character);
+        model.addAttribute("loggedIn", isLoggedIn());
+        if (isLoggedIn()) {
+            Character character = new Character();
+            character.setId(UUID.randomUUID().toString());
+            character.setUserId(getCurrentUser().getId());
+            character.setUrl("/images/blank.png");
+            model.addAttribute("character", character);
             model.addAttribute("title", "Character Center - New Character");
-    		return "edit";
-    	} else {
-    		return "login";
-    	}
+            return "edit";
+        } else {
+            return "login";
+        }
     }
 
     @RequestMapping("/char/{id}")
@@ -62,14 +65,14 @@ public class PageController extends BaseController {
 
     @RequestMapping("/char/{id}/edit")
     public String edit(@PathVariable("id") String id, Model model) {
-    	model.addAttribute("loggedIn", isLoggedIn());
+        model.addAttribute("loggedIn", isLoggedIn());
         if (isLoggedIn()) {
             User currentUser = getCurrentUser();
             Character existingCharacter = characterRepository.findOne(id);
             if (existingCharacter == null) {
                 return "index";
             } else if (!existingCharacter.getUserId().equals(currentUser.getId())) {
-            	model.addAttribute("character", existingCharacter);
+                model.addAttribute("character", existingCharacter);
                 model.addAttribute("title", "Character Center - " + existingCharacter.getName());
                 return "char";
             }
@@ -82,39 +85,39 @@ public class PageController extends BaseController {
 
     @RequestMapping("/login")
     public String login(Model model) {
-    	model.addAttribute("loggedIn", isLoggedIn());
-    	model.addAttribute("title", "Character Center - Login");
+        model.addAttribute("loggedIn", isLoggedIn());
+        model.addAttribute("title", "Character Center - Login");
         return "login";
     }
-    
-	@RequestMapping("/user")
-	public String getLoggedInUser(Model model) {
-		model.addAttribute("loggedIn", isLoggedIn());
-		if (isLoggedIn()) {
-			model.addAttribute("user", getCurrentUser());
-			model.addAttribute("title", "Character Center - User");
-			addCharactersToModel(model, getCurrentUser());
-			return "user";
-		} else {
-			return "login";
-		}
-	}
-	
-	@RequestMapping("/user/{id}")
-	public String getUser(@PathVariable("id") String id, Model model) {
-		model.addAttribute("loggedIn", isLoggedIn());
-		User user = userRepository.findOne(id);
-		model.addAttribute("user", user);
-		model.addAttribute("title", "Character Center - User");
-		addCharactersToModel(model, user);
-		return "user";
-	}
-	
-	@RequestMapping("/register")
-	public String registrationPage(Model model) {
-		model.addAttribute("loggedIn", isLoggedIn());
-		return "register";
-	}
+
+    @RequestMapping("/user")
+    public String getLoggedInUser(Model model) {
+        model.addAttribute("loggedIn", isLoggedIn());
+        if (isLoggedIn()) {
+            model.addAttribute("user", getCurrentUser());
+            model.addAttribute("title", "Character Center - User");
+            addCharactersToModel(model, getCurrentUser());
+            return "user";
+        } else {
+            return "login";
+        }
+    }
+
+    @RequestMapping("/user/{id}")
+    public String getUser(@PathVariable("id") String id, Model model) {
+        model.addAttribute("loggedIn", isLoggedIn());
+        User user = userRepository.findOne(id);
+        model.addAttribute("user", user);
+        model.addAttribute("title", "Character Center - User");
+        addCharactersToModel(model, user);
+        return "user";
+    }
+
+    @RequestMapping("/register")
+    public String registrationPage(Model model) {
+        model.addAttribute("loggedIn", isLoggedIn());
+        return "register";
+    }
 
     @RequestMapping("/c/{id}")
     public String characterShortcut(@PathVariable("id") String id) {
@@ -131,32 +134,40 @@ public class PageController extends BaseController {
         return "/user";
     }
 
-    @RequestMapping("/admin/characters")
-    public String adminCharacterPage(Model model) {
-        User currentUser = getCurrentUser();
-        if (getCurrentUser() != null && getCurrentUser().getEmail().equals("levelcap@live.com")) {
-            List<User> users = userRepository.findAll();
-            Map<User, List<Character>> charactersByUser = new HashMap<User, List<Character>>();
+    @RequestMapping("/browse/{cat}")
+    public String browseByGenre(@PathVariable("cat") String cat, Model model) {
+        Map<String, List<Character>> catMap = new HashMap<String, List<Character>>();
+        if (cat.equals("genre")) {
+            populateGenreMap(catMap);
+            model.addAttribute("browseCriteria", "Browse by Genre");
+        } else if (cat.equals("time")) {
+            populateTimePeriodMap(catMap);
+            model.addAttribute("browseCriteria", "Browse by Time Period");
+        }
+        model.addAttribute("catMap", catMap);
+        return "browse";
+    }
 
-            for (User user : users) {
-                List<Character> characters = characterRepository.findByUserId(user.getId());
-                if (characters != null && characters.size() > 0) {
-                    charactersByUser.put(user, characters);
-                }
+    private void addCharactersToModel(Model model, User user) {
+        model.addAttribute("loggedIn", isLoggedIn());
+        model.addAttribute("characters", characterRepository.findByUserId(user.getId()));
+    }
+
+    private void populateGenreMap(Map<String, List<Character>> catMap) {
+        for (Genre genre : Genre.values()) {
+            List<Character> characters = characterRepository.findByGenre(genre);
+            if (!CollectionUtils.isEmpty(characters)) {
+                catMap.put(genre.toString(), characters);
             }
-
-            model.addAttribute("charactersByUser", charactersByUser);
-            return "admin/characters";
-        } else {
-            Character character = characterRepository.findOne("974ddf4e-121c-4fa6-bb41-d926ab999e9e");
-            model.addAttribute("character", character);
-            model.addAttribute("loggedIn", isLoggedIn());
-            return "index";
         }
     }
 
-	private void addCharactersToModel(Model model, User user) {
-		model.addAttribute("loggedIn", isLoggedIn());
-		model.addAttribute("characters", characterRepository.findByUserId(user.getId()));
-	}
+    private void populateTimePeriodMap(Map<String, List<Character>> catMap) {
+        for (TimePeriod timePeriod : TimePeriod.values()) {
+            List<Character> characters = characterRepository.findByTimePeriod(timePeriod);
+            if (!CollectionUtils.isEmpty(characters)) {
+                catMap.put(timePeriod.toString(), characters);
+            }
+        }
+    }
 }

@@ -31,10 +31,10 @@
         </ul>
     </header>
     <section id="userSection">
-        <h1>All Characters</h1>
-        <ul th:each="userEntry : ${charactersByUser}">
-            <li><a href="/" th:href="@{'/user/'+${userEntry.key.id}}"><span class="userHeader" th:text="${userEntry.key.email}"></span></a></li>
-            <li class="userCharacter" th:each="char : ${userEntry.value}">
+        <h1 th:text="${browseCriteria}"></h1>
+        <ul th:each="catEntry : ${catMap}">
+            <li><span class="userHeader" th:text="${catEntry.key}"></span></li>
+            <li class="userCharacter" th:each="char : ${catEntry.value}">
                 <a href="/" th:href="@{'/char/'+${char.id}}"><span th:text="${char.name}"></span></a>
             </li>
         </ul>
