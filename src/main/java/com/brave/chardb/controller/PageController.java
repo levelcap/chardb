@@ -6,6 +6,7 @@ import com.brave.chardb.model.Character;
 import com.brave.chardb.model.User;
 import com.brave.chardb.repository.CharacterRepository;
 import com.brave.chardb.repository.UserRepository;
+import com.brave.chardb.services.FeaturedService;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,9 +31,12 @@ public class PageController extends BaseController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    FeaturedService featuredService;
+
     @RequestMapping("/")
     public String index(Model model) {
-        Character character = characterRepository.findOne("974ddf4e-121c-4fa6-bb41-d926ab999e9e");
+        Character character = featuredService.getFeaturedCharacter();
         model.addAttribute("character", character);
         model.addAttribute("loggedIn", isLoggedIn());
         return "index";

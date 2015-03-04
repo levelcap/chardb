@@ -38,6 +38,9 @@ public class CharacterController extends BaseController {
     @ResponseBody
     public HttpEntity<Character> saveCharacter(@PathVariable("id") String id, @RequestBody Character character) {
         if (isLoggedIn()) {
+            long currentTime = System.currentTimeMillis();
+            character.setUpdated(currentTime);
+
         	if (StringUtils.isEmpty(character.getUrl())) {
         		character.setUrl("/images/blank.png");
         	}
@@ -53,6 +56,7 @@ public class CharacterController extends BaseController {
                 }
             } else {
                 character.setUserId(currentUser.getId());
+                character.setCreated(currentTime);
                 character = characterRepository.save(character);
                 return new ResponseEntity<Character>(character, HttpStatus.OK);
             }
