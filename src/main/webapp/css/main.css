@@ -6,6 +6,7 @@ body {
 
 .page {
     background: url(/images/paper.jpg) top left repeat;
+    background-size: cover;
     width: 1320px;
     max-width: 100%;
     min-width: 768px;
