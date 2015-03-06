@@ -7,6 +7,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -58,8 +59,30 @@ public class UserController extends BaseController {
 			String hashedPassword = encoder.encodePassword(
 					user.getPassword(), null);
 			user.setPassword(hashedPassword);
+			user.setUsername(user.getEmail());
 			userRepository.save(user);
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		}
 	}
+	
+	@RequestMapping(value= "/username", method = RequestMethod.POST)
+	public HttpEntity<User> saveDisplayName(@RequestBody String username) {
+		if (isLoggedIn()) {
+			User currentUser = getCurrentUser();
+			List<User> existing = userRepository.findByUsernameIgnoreCase(username);
+			if (existing != null && existing.size() > 0) {
+				if (!existing.get(0).getId().equals(currentUser.getId())) {
+					return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);		
+				}
+			}
+			if (StringUtils.isEmpty(username)) {
+				username = currentUser.getId();
+			}
+			currentUser.setUsername(username);
+			userRepository.save(currentUser);
+			return new ResponseEntity<User>(currentUser, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<User>(HttpStatus.UNAUTHORIZED);
+		}
+	}	
 }

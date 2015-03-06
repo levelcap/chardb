@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -88,7 +89,12 @@ public class PageController extends BaseController {
 	public String getLoggedInUser(Model model) {
 		model.addAttribute("loggedIn", isLoggedIn());
 		if (isLoggedIn()) {
-			model.addAttribute("user", getCurrentUser());
+			User user = getCurrentUser();
+			if (StringUtils.isEmpty(user.getUsername())) {
+				user.setUsername(user.getId());
+			}
+			model.addAttribute("edit", true);
+			model.addAttribute("user", user);
 			model.addAttribute("title", "CharDB - User");
 			addCharactersToModel(model, getCurrentUser());
 			return "user";
@@ -101,6 +107,7 @@ public class PageController extends BaseController {
 	public String getUser(@PathVariable("id") String id, Model model) {
 		model.addAttribute("loggedIn", isLoggedIn());
 		User user = userRepository.findOne(id);
+		model.addAttribute("edit", false);	
 		model.addAttribute("user", user);
 		model.addAttribute("title", "CharDB - User");
 		addCharactersToModel(model, user);

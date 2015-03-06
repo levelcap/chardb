@@ -10,6 +10,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular-sanitize.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular.min.js'></script>
+    <script src='https://code.jquery.com/jquery-1.11.2.min.js'></script>
     <script type="text/javascript" src="/js/ng-imgur.min.js"></script>
 
     <script src="/js/main.js"></script>
@@ -30,11 +31,16 @@
 			</ul>
 		</header>
 		<section id="userSection" ng-controller="UserController">
+			<div th:if="${edit}">
+				<input type="hidden" id="currentName" th:value="${user.username}" />
+				Display Name: <input type="text" id="username" ng-model="username" />
+				<div class="charDbButton" id="saveUsername" ng-click='save()' >Save</div>
+			</div>
 			<h1>Your Characters</h1>
 			<ul id="characterList">
 				<li th:each="char : ${characters}">
     				<a href="/" th:href="@{'/char/'+${char.id}}"><span th:text="${char.name}"></span></a>
-    				<a href="/" th:href="@{'/char/'+${char.id}+'/edit'}">(edit)</a>
+    				<a href="/" th:if="${edit}" th:href="@{'/char/'+${char.id}+'/edit'}">(edit)</a>
 				</li>
 			</ul>
 		</section>

@@ -34,7 +34,11 @@ chardbApp.controller('CharacterController', function ($scope, $http, $sce) {
 
     $scope.save = function () {
         var saveCharacter = $scope.char;
-        saveCharacter.description = $scope.htmlcontent.toString();
+        if ($scope.htmlcontent !== null && $scope.htmlcontent !== "") {
+        	saveCharacter.description = $scope.htmlcontent.toString();
+        } else {
+        	saveCharacter.description = "";
+        }
         saveCharacter.id = $("#charId").val();
         $http.post('/character/' + id, saveCharacter).
             success(function (data, status, headers, config) {
@@ -88,7 +92,20 @@ chardbApp.config(['$provide', function($provide) {
 }]);
 
 chardbApp.controller('UserController', function ($scope, $http, $sce) {
-
+	$scope.username = $("#currentName").val();
+    $scope.save = function () {
+        $http.post('/api/user/username', $scope.username).
+            success(function (data, status, headers, config) {
+            	alert("Save success");
+            }).
+            error(function (data, status, headers, config) {
+            	if (status == 400) {
+            		alert("Sorry, that name is already in use!");
+            	} else {
+            		alert("Save failed");
+            	}
+            });
+    }
 });
 
 chardbApp.directive('drop', function ($timeout, imgur) {
