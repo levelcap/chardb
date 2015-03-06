@@ -6,6 +6,7 @@ body {
 
 .page {
     background: url(/images/paper.jpg) top left repeat;
+    background-size: cover;
     width: 1320px;
     max-width: 100%;
     min-width: 768px;
@@ -278,4 +279,16 @@ header ul li:hover {
     margin-top: 35px;
     margin-right: 30px;
     margin-left: 30px;
+}
+
+
+/** Admin Page **/
+.userHeader {
+    font-size: 16px;
+    font-weight: bold;
+    padding-bottom: 10px;
+}
+
+.userCharacter {
+    margin-left: 5px;
 }

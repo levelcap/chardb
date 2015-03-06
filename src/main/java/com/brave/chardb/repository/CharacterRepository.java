@@ -11,6 +11,6 @@ import java.util.List;
 public interface CharacterRepository extends MongoRepository<Character, String> {
     List<Character> findByUserId(String userId);
     List<Character> findByNameLikeIgnoreCase(String name);
-    List<Group> findByGenre(Genre genre);
-    List<Group> findByTimePeriod(TimePeriod timePeriod);
+    List<Character> findByGenre(Genre genre);
+    List<Character> findByTimePeriod(TimePeriod timePeriod);
 }

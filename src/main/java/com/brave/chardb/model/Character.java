@@ -14,6 +14,8 @@ public class Character {
     private String group;
     private TimePeriod timePeriod;
     private Genre genre;
+    private long created;
+    private long updated;
 
     public String getId() {
         return id;
@@ -77,5 +79,21 @@ public class Character {
 
     public void setGenre(Genre genre) {
         this.genre = genre;
+    }
+
+    public long getCreated() {
+        return created;
+    }
+
+    public void setCreated(long created) {
+        this.created = created;
+    }
+
+    public long getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(long updated) {
+        this.updated = updated;
     }
 }
