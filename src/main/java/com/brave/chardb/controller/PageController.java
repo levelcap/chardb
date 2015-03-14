@@ -112,7 +112,7 @@ public class PageController extends BaseController {
 			}
 			model.addAttribute("edit", true);
 			model.addAttribute("user", user);
-			model.addAttribute("title", "CharDB - User");
+			model.addAttribute("title", "Character Center -  User");
 			model.addAttribute("headerText", "Your Characters");
 			addCharactersToModel(model, getCurrentUser());
 			return "user";
@@ -135,7 +135,7 @@ public class PageController extends BaseController {
 		
 		model.addAttribute("edit", false);
 		model.addAttribute("user", user);
-		model.addAttribute("title", "CharDB - User");
+		model.addAttribute("title", "Character Center -  User");
 		model.addAttribute("headerText", user.getUsername() + "'s Characters");
 		addCharactersToModel(model, user);
 		return "user";
@@ -158,8 +158,8 @@ public class PageController extends BaseController {
 	}
 
 	@RequestMapping("/u/{id}")
-	public String userShortcut(@PathVariable("id") String id) {
-		return "/user";
+	public String userShortcut(@PathVariable("id") String id, Model model) {
+		return getUser(id, model);
 	}
 
 	@RequestMapping("/browse/{cat}")
@@ -172,6 +172,7 @@ public class PageController extends BaseController {
 			populateTimePeriodMap(catMap);
 			model.addAttribute("browseCriteria", "Browse by Time Period");
 		}
+		model.addAttribute("title", "Character Center - Browse");
 		model.addAttribute("catMap", catMap);
 		return "browse";
 	}

@@ -13,4 +13,5 @@ public interface CharacterRepository extends MongoRepository<Character, String> 
     List<Character> findByNameLikeIgnoreCase(String name);
     List<Character> findByGenre(Genre genre);
     List<Character> findByTimePeriod(TimePeriod timePeriod);
+    List<Character> findByGroup(String groupId);
 }
