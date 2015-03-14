@@ -293,6 +293,21 @@ header ul li:hover {
     margin-left: 30px;
 }
 
+.shareLink {
+	margin-top: 20px;
+	font-family: 'Metamorphous', cursive;
+	font-size: 14px;
+}
+
+.shareLink label {
+	font-weight: bold;
+	margin-right: 5px;
+}
+
+.shareLink a {
+
+}
+
 /** Admin Page **/
 .userHeader {
     font-size: 16px;
