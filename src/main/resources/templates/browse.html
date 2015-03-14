@@ -33,8 +33,8 @@
     <section id="userSection">
         <h1 th:text="${browseCriteria}"></h1>
         <ul th:each="catEntry : ${catMap}">
-            <li><span class="userHeader" th:text="${genreEntry.key}"></span></li>
-            <li class="userCharacter" th:each="char : ${genreEntry.value}">
+            <li><span class="userHeader" th:text="${catEntry.key}"></span></li>
+            <li class="userCharacter" th:each="char : ${catEntry.value}">
                 <a href="/" th:href="@{'/char/'+${char.id}}"><span th:text="${char.name}"></span></a>
             </li>
         </ul>
