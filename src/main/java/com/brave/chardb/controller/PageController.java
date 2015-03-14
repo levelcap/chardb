@@ -1,12 +1,10 @@
 package com.brave.chardb.controller;
 
-import com.brave.chardb.enums.Genre;
-import com.brave.chardb.enums.TimePeriod;
-import com.brave.chardb.model.Character;
-import com.brave.chardb.model.User;
-import com.brave.chardb.repository.CharacterRepository;
-import com.brave.chardb.repository.UserRepository;
-import com.brave.chardb.services.FeaturedService;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,10 +13,14 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import com.brave.chardb.enums.Genre;
+import com.brave.chardb.enums.TimePeriod;
+import com.brave.chardb.model.Character;
+import com.brave.chardb.model.User;
+import com.brave.chardb.repository.CharacterRepository;
+import com.brave.chardb.repository.UserRepository;
+import com.brave.chardb.services.FeaturedService;
+import com.brave.chardb.services.UserService;
 
 /**
  * Created by dcohen on 2/13/15.
@@ -33,6 +35,9 @@ public class PageController extends BaseController {
 
 	@Autowired
 	FeaturedService featuredService;
+	
+	@Autowired
+	UserService userService;
 
 	@RequestMapping("/")
 	public String index(Model model) {
@@ -74,7 +79,7 @@ public class PageController extends BaseController {
 			User currentUser = getCurrentUser();
 			Character existingCharacter = characterRepository.findOne(id);
 			if (existingCharacter == null) {
-				return "index";
+				return index(model);
 			} else if (!existingCharacter.getUserId().equals(
 					currentUser.getId())) {
 				model.addAttribute("character", existingCharacter);
@@ -108,6 +113,7 @@ public class PageController extends BaseController {
 			model.addAttribute("edit", true);
 			model.addAttribute("user", user);
 			model.addAttribute("title", "CharDB - User");
+			model.addAttribute("headerText", "Your Characters");
 			addCharactersToModel(model, getCurrentUser());
 			return "user";
 		} else {
@@ -119,9 +125,18 @@ public class PageController extends BaseController {
 	public String getUser(@PathVariable("id") String id, Model model) {
 		model.addAttribute("loggedIn", isLoggedIn());
 		User user = userRepository.findOne(id);
+		if (user == null) {
+			user = userService.getByUsername(id);
+		}
+		
+		if (user == null) {
+			return index(model);
+		}
+		
 		model.addAttribute("edit", false);
 		model.addAttribute("user", user);
 		model.addAttribute("title", "CharDB - User");
+		model.addAttribute("headerText", user.getUsername() + "'s Characters");
 		addCharactersToModel(model, user);
 		return "user";
 	}

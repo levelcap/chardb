@@ -37,7 +37,7 @@
 				Display Name: <input type="text" id="username" ng-model="username" />
 				<div class="charDbButton" id="saveUsername" ng-click='save()' >Save</div>
 			</div>
-			<h1>Your Characters</h1>
+			<h1 th:text="${headerText}">Your Characters</h1>
 			<ul id="characterList">
 				<li th:each="char : ${characters}">
     				<a href="/" th:href="@{'/char/'+${char.id}}"><span th:text="${char.name}"></span></a>
