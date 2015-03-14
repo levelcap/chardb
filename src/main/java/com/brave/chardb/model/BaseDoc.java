@@ -1,6 +1,7 @@
 package com.brave.chardb.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 
 public class BaseDoc {
     @Id
@@ -12,6 +13,9 @@ public class BaseDoc {
     private long created;
     private long updated;
 
+    @Transient
+    private User user;
+    
     public String getId() {
         return id;
     }
@@ -66,5 +70,13 @@ public class BaseDoc {
 
     public void setUpdated(long updated) {
         this.updated = updated;
+    }
+    
+    public User getUser() {
+    	return user;
+    }
+    
+    public void setUser(User user) {
+    	this.user = user;
     }
 }

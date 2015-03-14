@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="chardbApp">
+<html>
 <head>
     <title th:text="${title}"></title>
     <link rel='stylesheet prefetch' href='https://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css'/>
@@ -7,10 +7,12 @@
     <link rel='stylesheet prefetch' href='/css/main.css'/>
     <link href='https://fonts.googleapis.com/css?family=Covered+By+Your+Grace' rel='stylesheet' type='text/css'/>
     <link href='https://fonts.googleapis.com/css?family=Metamorphous' rel='stylesheet' type='text/css'/>
+    <script src='https://code.jquery.com/jquery-1.11.2.min.js'></script>
+	<script src='https://code.jquery.com/ui/1.11.2/jquery-ui.min.js'></script>
+    <link href="https://code.jquery.com/ui/1.11.1/themes/smoothness/jquery-ui.css" rel="stylesheet" type="text/css"/>    
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular-sanitize.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/textAngular/1.2.2/textAngular.min.js'></script>
-    <script src='https://code.jquery.com/jquery-1.11.2.min.js'></script>
     <script type="text/javascript" src="/js/ng-imgur.min.js"></script>
 
     <script src="/js/main.js"></script>
@@ -23,7 +25,7 @@
         <img id="rightTape" src="/images/tape-right.png"/>
 		<header th:replace="fragments/header :: header"> </header>
 		
-		<div id="editContainer">
+		<div id="editContainer" ng-app="chardbApp">
 			<section id="characterSection" ng-controller="CharacterController" th:unless="${character} == null">
 				<input type="hidden" name="objId" id="objId" th:value="${character.id}" />
     			<div class="subsection" id="basicInfo">
@@ -90,13 +92,98 @@
         			</div>
     			</div>
     			<div ng-show="isSet(2)" class="subsection" id="members">
-    				Members
+    				<div class="infoline"><label>Search Characters to Add: </label><span><input id="memberSearch" /></span></div>
+    				<ul class="linkedList">
+    					<li ng-repeat="member in char.members" class="settingMember">
+  							 <a ng-href="/c/{{member.id}}">{{member.name}}</a> <span class="deleteSpan" ng-click="deleteMember(member.id)">(remove)</span>
+						</li>
+    				</ul>
+    				
+        			<div id="characterControls">
+        				<div class="charDbButton" ng-click='save()' >Save</div>
+        				<div class="charDbButton" ng-click='delete()' >Delete</div>
+        			</div>					
     			</div>
     			<div ng-show="isSet(3)" class="subsection" id="locations">
-    				Locations
+    				<div class="infoline"><label>Search Locations to Add: </label><span><input id="locationSearch" /></span></div>
+    				<ul class="linkedList">
+						<li ng-repeat="location in char.locations" class="settingLocation">
+  							<a ng-href="/l/{{location.id}}">{{location.name}}</a> <span class="deleteSpan" ng-click='deleteLocation(location.id)' >(remove)</span>
+						</li>
+					</ul>
+        			<div id="characterControls">
+        				<div class="charDbButton" ng-click='save()' >Save</div>
+        				<div class="charDbButton" ng-click='delete()' >Delete</div>
+        			</div>					
     			</div>
 			</section>
 		</div>				
 	</div>	
+	
+	<script type="text/javascript">
+	$(function() {
+		$("#memberSearch").autocomplete({
+			minLength: 1,
+		    delay: 500,
+		    //define callback to format results
+		    source: function (request, response) {
+		    	$.getJSON("/search/character/name/" + request.term, function(result) {
+		    		response($.map(result, function(item) {
+		        		return {
+		        			label: item.name + " by " + item.user.username,
+							value: item.name,
+							member: item,
+						}
+					}));
+				});	
+			},
+		 
+			select : function(event, ui) {
+		    	if (ui.item) {
+		        	event.preventDefault();
+		    		var members = angular.element("#settingSection").scope().char.members;
+		    		if (null == members) {
+		    			members = [];
+		    		}
+		    		members.push(ui.item.member);
+		    		angular.element("#settingSection").scope().char.members = members;
+		    		angular.element("#settingSection").scope().$apply();
+				}
+			}
+		});
+	});
+	
+	$(function() {
+		$("#locationSearch").autocomplete({
+			minLength: 1,
+		    delay: 500,
+		    //define callback to format results
+		    source: function (request, response) {
+		    	$.getJSON("/search/location/name/" + request.term, function(result) {
+		    		response($.map(result, function(item) {
+		        		return {
+		        			label: item.name + " by " + item.user.username,
+							value: item.name,
+							location: item
+						}
+					}));
+				});	
+			},
+		 
+			select : function(event, ui) {
+		    	if (ui.item) {
+		        	event.preventDefault();
+		    		var locations = angular.element("#settingSection").scope().char.locations;
+		    		if (null == locations) {
+		    			locations = [];
+		    		}
+		    		locations.push(ui.item.location);
+		    		angular.element("#settingSection").scope().char.locations = locations;
+		    		angular.element("#settingSection").scope().$apply();
+				}
+			}
+		});
+	});	
+	</script>	
 </body>
 </html>

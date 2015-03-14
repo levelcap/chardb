@@ -115,24 +115,6 @@ public class PageController extends BaseController {
 		return "char";
 	}
 	
-	@RequestMapping("/s/{id}")
-	public String getSetting(@PathVariable("id") String id, Model model) {
-		Setting setting = settingRepository.findOne(id);
-		model.addAttribute("loggedIn", isLoggedIn());
-		model.addAttribute("setting", setting);
-		model.addAttribute("title", "Character Center - " + setting.getName());
-		return "char";
-	}
-	
-	@RequestMapping("/l/{id}")
-	public String getLocation(@PathVariable("id") String id, Model model) {
-		Location location = locationRepository.findOne(id);
-		model.addAttribute("loggedIn", isLoggedIn());
-		model.addAttribute("location", location);
-		model.addAttribute("title", "Character Center - " + location.getName());
-		return "char";
-	}
-
 	@RequestMapping("/char/{id}/edit")
 	public String edit(@PathVariable("id") String id, Model model) {
 		model.addAttribute("loggedIn", isLoggedIn());
@@ -151,6 +133,70 @@ public class PageController extends BaseController {
 			model.addAttribute("character", existingCharacter);
 			model.addAttribute("title", "Character Center - Editing "
 					+ existingCharacter.getName());
+			return "edit";
+		}
+		return "login";
+	}
+	
+	@RequestMapping("/s/{id}")
+	public String getSetting(@PathVariable("id") String id, Model model) {
+		Setting setting = settingRepository.findOne(id);
+		model.addAttribute("loggedIn", isLoggedIn());
+		model.addAttribute("setting", setting);
+		model.addAttribute("title", "Character Center - " + setting.getName());
+		return "char";
+	}
+	
+	@RequestMapping("/s/{id}/edit")
+	public String editSetting(@PathVariable("id") String id, Model model) {
+		model.addAttribute("loggedIn", isLoggedIn());
+		if (isLoggedIn()) {
+			User currentUser = getCurrentUser();
+			Setting existingSetting = settingRepository.findOne(id);
+			if (existingSetting == null) {
+				return index(model);
+			} else if (!existingSetting.getUserId().equals(
+					currentUser.getId())) {
+				model.addAttribute("setting", existingSetting);
+				model.addAttribute("title", "Character Center - "
+						+ existingSetting.getName());
+				return "char";
+			}
+			model.addAttribute("setting", existingSetting);
+			model.addAttribute("title", "Character Center - Editing "
+					+ existingSetting.getName());
+			return "edit";
+		}
+		return "login";
+	}
+	
+	@RequestMapping("/l/{id}")
+	public String getLocation(@PathVariable("id") String id, Model model) {
+		Location location = locationRepository.findOne(id);
+		model.addAttribute("loggedIn", isLoggedIn());
+		model.addAttribute("location", location);
+		model.addAttribute("title", "Character Center - " + location.getName());
+		return "char";
+	}
+	
+	@RequestMapping("/l/{id}/edit")
+	public String editLocation(@PathVariable("id") String id, Model model) {
+		model.addAttribute("loggedIn", isLoggedIn());
+		if (isLoggedIn()) {
+			User currentUser = getCurrentUser();
+			Location existingLocation = locationRepository.findOne(id);
+			if (existingLocation == null) {
+				return index(model);
+			} else if (!existingLocation.getUserId().equals(
+					currentUser.getId())) {
+				model.addAttribute("location", existingLocation);
+				model.addAttribute("title", "Character Center - "
+						+ existingLocation.getName());
+				return "char";
+			}
+			model.addAttribute("location", existingLocation);
+			model.addAttribute("title", "Character Center - Editing "
+					+ existingLocation.getName());
 			return "edit";
 		}
 		return "login";
@@ -217,8 +263,8 @@ public class PageController extends BaseController {
 	}
 
 	@RequestMapping("/c/{id}")
-	public String characterShortcut(@PathVariable("id") String id) {
-		return "/user";
+	public String characterShortcut(@PathVariable("id") String id, Model model) {
+		return getCharacter(id, model);
 	}
 
 	@RequestMapping("/u/{id}")

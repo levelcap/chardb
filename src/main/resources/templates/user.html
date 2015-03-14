@@ -46,7 +46,7 @@
 				<ul id="characterList">
 					<li th:each="char : ${locations}">
     					<a href="/" th:href="@{'/l/'+${char.id}}"><span th:text="${char.name}"></span></a>
-    					<a href="/" th:if="${edit}" th:href="@{'/char/'+${char.id}+'/edit'}">(edit)</a>
+    					<a href="/" th:if="${edit}" th:href="@{'/l/'+${char.id}+'/edit'}">(edit)</a>
 					</li>
 				</ul>
 			</section>
@@ -55,7 +55,7 @@
 				<ul id="characterList">
 					<li th:each="char : ${settings}">
     					<a href="/" th:href="@{'/s/'+${char.id}}"><span th:text="${char.name}"></span></a>
-    					<a href="/" th:if="${edit}" th:href="@{'/char/'+${char.id}+'/edit'}">(edit)</a>
+    					<a href="/" th:if="${edit}" th:href="@{'/s/'+${char.id}+'/edit'}">(edit)</a>
 					</li>
 				</ul>
 			</section>

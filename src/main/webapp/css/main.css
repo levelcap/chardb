@@ -357,6 +357,20 @@ header ul li:hover {
 	width: 100% !important;
 }
 
+.linkedList {
+	padding-top: 20px;
+	font-family: 'Metamorphous', cursive;
+	font-size: 14px;
+}
+
+.deleteSpan {
+	font-family: 'Covered By Your Grace';
+	font-size: 20px;
+	color: #0000A0;
+	cursor: pointer;
+	
+}
+
 /** Admin Page **/
 .userHeader {
 	font-size: 16px;

@@ -11,6 +11,7 @@ var genres = [
     {id: "SCIFI", name: "Science Fiction"},
     {id: "ANIME", name: "Anime"}
 ];
+
 var chardbApp = angular.module('chardbApp', ['textAngular', 'ngImgur']);
 
 chardbApp.controller('CharacterController', function ($scope, $http, $sce) {
@@ -41,7 +42,7 @@ chardbApp.controller('CharacterController', function ($scope, $http, $sce) {
         } else {
         	saveCharacter.description = "";
         }
-        saveCharacter.id = $("#charId").val();
+        saveCharacter.id = $("#objId").val();
         $http.post('/api/character/' + id, saveCharacter).
             success(function (data, status, headers, config) {
             	alert("Save success");
@@ -91,7 +92,7 @@ chardbApp.controller('LocationController', function ($scope, $http, $sce) {
         } else {
         	saveCharacter.description = "";
         }
-        saveCharacter.id = $("#charId").val();
+        saveCharacter.id = $("#objId").val();
         $http.post('/api/location/' + id, saveCharacter).
             success(function (data, status, headers, config) {
             	alert("Save success");
@@ -141,7 +142,7 @@ chardbApp.controller('SettingController', function ($scope, $http, $sce) {
         } else {
         	saveCharacter.description = "";
         }
-        saveCharacter.id = $("#charId").val();
+        saveCharacter.id = $("#objId").val();
         $http.post('/api/setting/' + id, saveCharacter).
             success(function (data, status, headers, config) {
             	alert("Save success");
@@ -160,6 +161,22 @@ chardbApp.controller('SettingController', function ($scope, $http, $sce) {
         error(function (data, status, headers, config) {
         	alert("Delete failure");
         });
+    }
+    
+    $scope.deleteMember = function(memberId) {
+    	for (var i = 0; i < $scope.char.members.length; i++) {
+    		if ($scope.char.members[i].id == memberId) {
+    			$scope.char.members.splice(i,1);
+    		}
+    	}
+    }
+    
+    $scope.deleteLocation = function(locationId) {
+    	for (var i = 0; i < $scope.char.locations.length; i++) {
+    		if ($scope.char.locations[i].id == locationId) {
+    			$scope.char.locations.splice(i,1);
+    		}
+    	}
     }
     
     $scope.tab = 1;
@@ -188,20 +205,6 @@ chardbApp.controller('RegistrationController', function ($scope, $http, $sce) {
             });
     }
 });
-
-chardbApp.config(['$provide', function($provide) {
-    // this demonstrates how to register a new tool and add it to the default toolbar
-    $provide.decorator('taOptions', ['$delegate', function(taOptions) {
-        // $delegate is the taOptions we are decorating
-        // here we override the default toolbars and classes specified in taOptions.
-        taOptions.toolbar = [
-            ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'pre', 'quote'],
-            ['bold', 'italics', 'underline', 'ul', 'ol', 'redo', 'undo', 'clear'],
-            ['justifyLeft','justifyCenter','justifyRight'],
-        ];
-        return taOptions; // whatever you return will be the taOptions
-    }]);
-}]);
 
 chardbApp.controller('UserController', function ($scope, $http, $sce) {
 	$scope.username = $("#currentName").val();
