@@ -21,7 +21,7 @@ import com.brave.chardb.repository.CharacterRepository;
  */
 
 @RestController
-@RequestMapping("/character")
+@RequestMapping("/api/character")
 public class CharacterController extends BaseController {
 
     @Autowired

@@ -11,7 +11,8 @@ import com.brave.chardb.enums.TimePeriod;
 public class Setting extends BaseDoc {
     private TimePeriod timePeriod;
     private Genre genre;
-    List<Character> members;    
+    private List<Character> members;
+    private List<Location> locations;
 
     public TimePeriod getTimePeriod() {
         return timePeriod;
@@ -36,4 +37,12 @@ public class Setting extends BaseDoc {
     public void setMembers(List<Character> members) {
         this.members = members;
     }
+    
+    public List<Location> getLocations() {
+        return locations;
+    }
+
+    public void setLocations(List<Location> locations) {
+        this.locations = locations;
+    }    
 }

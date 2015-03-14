@@ -3,9 +3,9 @@ package com.brave.chardb.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.brave.chardb.enums.Genre;
 import com.brave.chardb.enums.TimePeriod;
 import com.brave.chardb.model.Character;
+import com.brave.chardb.model.Location;
+import com.brave.chardb.model.Setting;
 import com.brave.chardb.model.User;
 import com.brave.chardb.repository.CharacterRepository;
+import com.brave.chardb.repository.LocationRepository;
+import com.brave.chardb.repository.SettingRepository;
 import com.brave.chardb.repository.UserRepository;
 import com.brave.chardb.services.FeaturedService;
 import com.brave.chardb.services.UserService;
@@ -29,6 +33,12 @@ import com.brave.chardb.services.UserService;
 public class PageController extends BaseController {
 	@Autowired
 	private CharacterRepository characterRepository;
+	
+	@Autowired
+	private SettingRepository settingRepository;
+	
+	@Autowired
+	private LocationRepository locationRepository;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -52,7 +62,7 @@ public class PageController extends BaseController {
 		model.addAttribute("loggedIn", isLoggedIn());
 		if (isLoggedIn()) {
 			Character character = new Character();
-			character.setId(UUID.randomUUID().toString());
+			character.setId(new ObjectId().toString());
 			character.setUserId(getCurrentUser().getId());
 			character.setUrl("/images/blank.png");
 			model.addAttribute("character", character);
@@ -62,13 +72,64 @@ public class PageController extends BaseController {
 			return "login";
 		}
 	}
+	
+	@RequestMapping("/newLocation")
+	public String newLocation(Model model) {
+		model.addAttribute("loggedIn", isLoggedIn());
+		if (isLoggedIn()) {
+			Location location = new Location();
+			location.setId(new ObjectId().toString());
+			location.setUserId(getCurrentUser().getId());
+			location.setUrl("/images/blank.png");
+			model.addAttribute("location", location);
+			model.addAttribute("title", "Character Center - New Location");
+			return "edit";
+		} else {
+			return "login";
+		}
+	}
+	
+	@RequestMapping("/newSetting")
+	public String newSetting(Model model) {
+		model.addAttribute("loggedIn", isLoggedIn());
+		if (isLoggedIn()) {
+			Setting setting = new Setting();
+			setting.setId(new ObjectId().toString());
+			setting.setUserId(getCurrentUser().getId());
+			setting.setUrl("/images/blank.png");
+			model.addAttribute("setting", setting);
+			model.addAttribute("title", "Character Center - New Setting");
+			return "edit";
+		} else {
+			return "login";
+		}
+	}
+
 
 	@RequestMapping("/char/{id}")
-	public String index(@PathVariable("id") String id, Model model) {
+	public String getCharacter(@PathVariable("id") String id, Model model) {
 		Character character = characterRepository.findOne(id);
 		model.addAttribute("loggedIn", isLoggedIn());
 		model.addAttribute("character", character);
 		model.addAttribute("title", "Character Center - " + character.getName());
+		return "char";
+	}
+	
+	@RequestMapping("/s/{id}")
+	public String getSetting(@PathVariable("id") String id, Model model) {
+		Setting setting = settingRepository.findOne(id);
+		model.addAttribute("loggedIn", isLoggedIn());
+		model.addAttribute("setting", setting);
+		model.addAttribute("title", "Character Center - " + setting.getName());
+		return "char";
+	}
+	
+	@RequestMapping("/l/{id}")
+	public String getLocation(@PathVariable("id") String id, Model model) {
+		Location location = locationRepository.findOne(id);
+		model.addAttribute("loggedIn", isLoggedIn());
+		model.addAttribute("location", location);
+		model.addAttribute("title", "Character Center - " + location.getName());
 		return "char";
 	}
 
@@ -113,8 +174,12 @@ public class PageController extends BaseController {
 			model.addAttribute("edit", true);
 			model.addAttribute("user", user);
 			model.addAttribute("title", "Character Center -  User");
-			model.addAttribute("headerText", "Your Characters");
+			model.addAttribute("characterHeader", "Your Characters");
+			model.addAttribute("locationsHeader", "Your Locations");
+			model.addAttribute("settingsHeader", "Your Settings");
 			addCharactersToModel(model, getCurrentUser());
+			addLocationsToModel(model, getCurrentUser());
+			addSettingsToModel(model, getCurrentUser());
 			return "user";
 		} else {
 			return "login";
@@ -136,8 +201,12 @@ public class PageController extends BaseController {
 		model.addAttribute("edit", false);
 		model.addAttribute("user", user);
 		model.addAttribute("title", "Character Center -  User");
-		model.addAttribute("headerText", user.getUsername() + "'s Characters");
-		addCharactersToModel(model, user);
+		model.addAttribute("characterHeader", user.getUsername() + "'s Characters");
+		model.addAttribute("locationsHeader", user.getUsername() + "'s Locations");
+		model.addAttribute("settingsHeader", user.getUsername() + "'s Settings");
+		addCharactersToModel(model, getCurrentUser());
+		addLocationsToModel(model, getCurrentUser());
+		addSettingsToModel(model, getCurrentUser());
 		return "user";
 	}
 
@@ -149,11 +218,6 @@ public class PageController extends BaseController {
 
 	@RequestMapping("/c/{id}")
 	public String characterShortcut(@PathVariable("id") String id) {
-		return "/user";
-	}
-
-	@RequestMapping("/s/{id}")
-	public String settingShortcut(@PathVariable("id") String id) {
 		return "/user";
 	}
 
@@ -178,9 +242,18 @@ public class PageController extends BaseController {
 	}
 
 	private void addCharactersToModel(Model model, User user) {
-		model.addAttribute("loggedIn", isLoggedIn());
 		model.addAttribute("characters",
 				characterRepository.findByUserId(user.getId()));
+	}
+	
+	private void addLocationsToModel(Model model, User user) {
+		model.addAttribute("locations",
+				locationRepository.findByUserId(user.getId()));
+	}
+	
+	private void addSettingsToModel(Model model, User user) {
+		model.addAttribute("settings",
+				settingRepository.findByUserId(user.getId()));
 	}
 
 	private void populateGenreMap(Map<String, List<Character>> catMap) {
