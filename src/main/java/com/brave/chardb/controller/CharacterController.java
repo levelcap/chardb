@@ -49,6 +49,7 @@ public class CharacterController extends BaseController {
             Character existingCharacter = characterRepository.findOne(id);
             if (existingCharacter != null) {
                 if (existingCharacter.getUserId().equals(currentUser.getId())) {
+                	character.setUserId(currentUser.getId());
                     character = characterRepository.save(character);
                     return new ResponseEntity<Character>(character, HttpStatus.OK);
                 } else {
