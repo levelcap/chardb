@@ -363,6 +363,10 @@ header ul li:hover {
 	font-size: 14px;
 }
 
+.linkedList li {
+	margin-top: 15px;
+}
+
 .deleteSpan {
 	font-family: 'Covered By Your Grace';
 	font-size: 20px;
