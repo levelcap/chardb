@@ -79,15 +79,15 @@
     			</div> 
    			
     			<div ng-show="isSet(2)" class="subsection" id="members">
-					<ul id="characterList">
-						<li th:each="char : ${setting.members}">
+					<ul id="linkedList">
+						<li class="settingMember" th:each="char : ${setting.members}">
     						<a href="/" th:href="@{'/char/'+${char.id}}"><span th:text="${char.name}"></span></a>
 						</li>
 					</ul>
     			</div>
     			<div ng-show="isSet(3)" class="subsection" id="locations">
-    				<ul id="characterList">
-						<li th:each="char : ${setting.locations}">
+    				<ul id="linkedList">
+						<li class="settingLocation" th:each="char : ${setting.locations}">
     						<a href="/" th:href="@{'/l/'+${char.id}}"><span th:text="${char.name}"></span></a>
 						</li>
 					</ul>

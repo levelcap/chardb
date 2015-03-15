@@ -250,9 +250,9 @@ public class PageController extends BaseController {
 		model.addAttribute("characterHeader", user.getUsername() + "'s Characters");
 		model.addAttribute("locationsHeader", user.getUsername() + "'s Locations");
 		model.addAttribute("settingsHeader", user.getUsername() + "'s Settings");
-		addCharactersToModel(model, getCurrentUser());
-		addLocationsToModel(model, getCurrentUser());
-		addSettingsToModel(model, getCurrentUser());
+		addCharactersToModel(model, user);
+		addLocationsToModel(model, user);
+		addSettingsToModel(model, user);
 		return "user";
 	}
 
