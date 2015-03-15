@@ -274,6 +274,7 @@ public class PageController extends BaseController {
 
 	@RequestMapping("/browse/{cat}")
 	public String browseByGenre(@PathVariable("cat") String cat, Model model) {
+		model.addAttribute("loggedIn", isLoggedIn());
 		Map<String, List<Character>> catMap = new HashMap<String, List<Character>>();
 		if (cat.equals("genre")) {
 			populateGenreMap(catMap);
