@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface SettingRepository extends MongoRepository<Setting, String> {
     List<Setting> findByUserId(String userId);
+    List<Setting> findByNameLikeIgnoreCase(String name);
     List<Setting> findByGenre(Genre genre);
     List<Setting> findByTimePeriod(TimePeriod timePeriod);
 }

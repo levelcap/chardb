@@ -57,7 +57,8 @@
             <h2>Search</h2>
 
             <div class="infoline"><label>Search Characters: </label><span><input id="nameSearch"/></span></div>
-            <div class="infoline"><label>Search Groups: </label><span><input id="groupSearch"/></span></div>
+            <div class="infoline"><label>Search Locations: </label><span><input id="locationSearch"/></span></div>
+            <div class="infoline"><label>Search Settings: </label><span><input id="settingSearch"/></span></div>
         </div>
         <div class="browseSub">
             <h2>Browse</h2>
@@ -79,9 +80,57 @@
                 $.getJSON("/search/character/name/" + request.term, function (result) {
                     response($.map(result, function (item) {
                         return {
-                            label: item.name,
+                            label: item.name + " by " + item.user.username,
                             value: item.name,
                             tag_url: "/char/" + item.id
+                        }
+                    }));
+                });
+            },
+
+            select: function (event, ui) {
+                if (ui.item) {
+                    event.preventDefault();
+                    window.location.href = ui.item.tag_url;
+                }
+            }
+        });
+
+        $("#locationSearch").autocomplete({
+            minLength: 1,
+            delay: 500,
+            //define callback to format results
+            source: function (request, response) {
+                $.getJSON("/search/location/name/" + request.term, function (result) {
+                    response($.map(result, function (item) {
+                        return {
+                            label: item.name + " by " + item.user.username,
+                            value: item.name,
+                            tag_url: "/l/" + item.id
+                        }
+                    }));
+                });
+            },
+
+            select: function (event, ui) {
+                if (ui.item) {
+                    event.preventDefault();
+                    window.location.href = ui.item.tag_url;
+                }
+            }
+        });
+
+        $("#settingSearch").autocomplete({
+            minLength: 1,
+            delay: 500,
+            //define callback to format results
+            source: function (request, response) {
+                $.getJSON("/search/setting/name/" + request.term, function (result) {
+                    response($.map(result, function (item) {
+                        return {
+                            label: item.name + " by " + item.user.username,
+                            value: item.name,
+                            tag_url: "/s/" + item.id
                         }
                     }));
                 });
