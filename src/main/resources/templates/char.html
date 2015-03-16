@@ -18,82 +18,89 @@
 </head>
 
 <body>
-	<div class="page">
-        <img id="leftTape" src="/images/tape-left.png"/>
-        <img id="rightTape" src="/images/tape-right.png"/>
-		<header th:replace="fragments/header :: header"> </header>
-		
-		<div id="detailContainer">
-			<section id="characterSection" th:unless="${character} == null">
-    			<div class="subsection" id="basicInfo">
-        			<div id="name"><span th:text="${character.name}"></span></div>
-        			<img th:attr="src=${character.url}"/>
-        			<div class="infoline"><label>Group:</label> <span th:text="${character.group}"></span></div>
-        			<div class="infoline"><label>Time:</label> <span th:text="${character.timePeriod}"></span></div>
-        			<div class="infoline"><label>Genre:</label> <span th:text="${character.genre}"></span></div>
-    			</div>
+<div class="page">
+    <img id="leftTape" src="/images/tape-left.png"/>
+    <img id="rightTape" src="/images/tape-right.png"/>
+    <header th:replace="fragments/header :: header"></header>
 
-    			<div class="subsection" id="details">
-    				<div class="container app">
-	        			<div id="description" th:utext="${character.description}">
-    	    			</div>
-        			</div>
-    			</div>
-			</section>
-		
-			<section id="locationSection" th:unless="${location} == null">
-    			<div class="subsection" id="basicInfo">
-        			<div id="name"><span th:text="${location.name}"></span></div>
-        			<img th:attr="src=${location.url}"/>
-        			<div class="infoline"><label>Group:</label> <span th:text="${location.group}"></span></div>
-        			<div class="infoline"><label>Time:</label> <span th:text="${location.timePeriod}"></span></div>
-        			<div class="infoline"><label>Genre:</label> <span th:text="${location.genre}"></span></div>
-    			</div>
+    <div id="detailContainer">
+        <section id="characterSection" th:unless="${character} == null">
+            <div class="subsection" id="basicInfo">
+                <div id="name"><span th:text="${character.name}"></span></div>
+                <img th:attr="src=${character.url}"/>
 
-    			<div class="subsection" id="details">
-    				<div class="container app">
-	        			<div id="description" th:utext="${location.description}">
-    	    			</div>
-        			</div>
-    			</div>
-			</section>
-		
-			<section id="settingSection" ng-controller="SettingController" th:unless="${setting} == null">
-				<div id="settingNav">
-					<div ng-class="{active:isSet(1)}" ng-click="setTab(1)" id="settingDetails">Details</div>
-					<div ng-class="{active:isSet(2)}" ng-click="setTab(2)" id="settingMembers">Members</div>
-					<div ng-class="{active:isSet(3)}" ng-click="setTab(3)" id="settingLocations">Locations</div>
-				</div>
-				<div class="subsection" id="basicInfo">
-        			<div id="name"><span th:text="${setting.name}"></span></div>
-        			<img th:attr="src=${setting.url}"/>
-        			<div class="infoline"><label>Time:</label> <span th:text="${setting.timePeriod}"></span></div>
-        			<div class="infoline"><label>Genre:</label> <span th:text="${setting.genre}"></span></div>
-    			</div>
+                <div class="infoline"><label>Group:</label> <span th:text="${character.group}"></span></div>
+                <div class="infoline"><label>Time:</label> <span th:text="${character.timePeriod}"></span></div>
+                <div class="infoline"><label>Genre:</label> <span th:text="${character.genre}"></span></div>
+            </div>
 
-    			<div ng-show="isSet(1)" class="subsection" id="details">
-    				<div class="container app">
-	        			<div id="description" th:utext="${setting.description}">
-    	    			</div>
-        			</div>
-    			</div> 
-   			
-    			<div ng-show="isSet(2)" class="subsection" id="members">
-					<ul class="linkedList">
-						<li class="settingMember" th:each="char : ${setting.members}">
-    						<a href="/" th:href="@{'/char/'+${char.id}}"><span th:text="${char.name}"></span></a>
-						</li>
-					</ul>
-    			</div>
-    			<div ng-show="isSet(3)" class="subsection" id="locations">
-    				<ul class="linkedList">
-						<li class="settingLocation" th:each="char : ${setting.locations}">
-    						<a href="/" th:href="@{'/l/'+${char.id}}"><span th:text="${char.name}"></span></a>
-						</li>
-					</ul>
-    			</div>
-			</section>
-		</div>	
-	</div>	
+            <div class="subsection" id="details">
+                <div class="container app">
+                    <div id="description" th:utext="${character.description}">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="locationSection" th:unless="${location} == null">
+            <div class="subsection" id="basicInfo">
+                <div id="name"><span th:text="${location.name}"></span></div>
+                <img th:attr="src=${location.url}"/>
+
+                <div class="infoline"><label>Group:</label> <span th:text="${location.group}"></span></div>
+                <div class="infoline"><label>Time:</label> <span th:text="${location.timePeriod}"></span></div>
+                <div class="infoline"><label>Genre:</label> <span th:text="${location.genre}"></span></div>
+            </div>
+
+            <div class="subsection" id="details">
+                <div class="container app">
+                    <div id="description" th:utext="${location.description}">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="settingSection" ng-controller="SettingController" th:unless="${setting} == null">
+            <div id="settingNav">
+                <div ng-class="{active:isSet(1)}" ng-click="setTab(1)" id="settingDetails">Details</div>
+                <div ng-class="{active:isSet(2)}" ng-click="setTab(2)" id="settingMembers">Members</div>
+                <div ng-class="{active:isSet(3)}" ng-click="setTab(3)" id="settingLocations">Locations</div>
+            </div>
+            <div class="subsection" id="basicInfo">
+                <div id="name"><span th:text="${setting.name}"></span></div>
+                <img th:attr="src=${setting.url}"/>
+
+                <div class="infoline"><label>Time:</label> <span th:text="${setting.timePeriod}"></span></div>
+                <div class="infoline"><label>Genre:</label> <span th:text="${setting.genre}"></span></div>
+            </div>
+
+            <div ng-show="isSet(1)" class="subsection" id="details">
+                <div class="container app">
+                    <div id="description" th:utext="${setting.description}">
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="isSet(2)" class="subsection" id="members">
+                <div class="container app">
+                    <ul class="linkedList">
+                        <li class="settingMember" th:each="char : ${setting.members}">
+                            <a href="/" th:href="@{'/char/'+${char.id}}"><span th:text="${char.name}"></span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div ng-show="isSet(3)" class="subsection" id="locations">
+                <div class="container app">
+                    <ul class="linkedList">
+                        <li class="settingLocation" th:each="char : ${setting.locations}">
+                            <a href="/" th:href="@{'/l/'+${char.id}}"><span th:text="${char.name}"></span></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
 </body>
 </html>
